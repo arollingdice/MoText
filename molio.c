@@ -8,6 +8,7 @@
 #include <sys/ioctl.h>
 #include <termios.h>
 #include <unistd.h>
+#include "molio.h"
 
 /*** defines ***/
 #define MoTEXT_VERSION "0.0.1"
@@ -252,6 +253,7 @@ and increments the ab->len variable to reflect the new length of the buffer
 */
 
 void abAppend(struct abuf *ab, const char *s, int len)
+/// @brief
 {
     char *new = realloc(ab->b, ab->len + len);
 
@@ -279,6 +281,8 @@ void editorDrawRows(struct abuf *ab)
             char welcome[80];
             int welcomelen = snprintf(welcome, sizeof(welcome),
                                       "MoText -- version %s", MoTEXT_VERSION);
+            // editorDrawRowsIf the length of the welcome message
+            // is greater than the width of the screen (E.screencols), it is truncated to fit.
             if (welcomelen > E.screencols)
                 welcomelen = E.screencols;
             // To center a string, you divide the screen width by 2,
@@ -312,7 +316,6 @@ void editorRefreshScreen()
 {
     /*
     \x1b is the escape charcter. It's 27 in decimal.
-    I am writing 4 bytes out to the terminal
     escape character is always followed by a [ character
 
     Escape sequences instruct the terminal to do various text
