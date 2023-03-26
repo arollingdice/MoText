@@ -300,7 +300,7 @@ void editorDrawRows(struct abuf *ab)
         // clear each line as we redraw them.
         // K command erases part of the current line.
         // 0 here erases the part of the line right of the cursor.
-        abAppend(ab, "\x1b[k", 3);
+        abAppend(ab, "\x1b[K", 3);
         if (y < E.screenrows - 1)
         {
             abAppend(ab, "\r\n", 2);
@@ -328,7 +328,6 @@ void editorRefreshScreen()
     struct abuf ab = ABUF_INIT;
 
     abAppend(&ab, "\x1b[?25l", 6); // this is for hiding the cursor before refreshing the screen
-    abAppend(&ab, "\x1b[2J", 4);
     abAppend(&ab, "\x1b[H", 3);
 
     editorDrawRows(&ab);
@@ -337,10 +336,9 @@ void editorRefreshScreen()
     snprintf(buf, sizeof(buf), "\x1b[%d;%dH", E.cy + 1, E.cx + 1);
     abAppend(&ab, buf, strlen(buf));
 
-    abAppend(&ab, "\x1b[H", 3);
-    abAppend(&ab, "\x1b[?25l", 6); // this is for showing the cursor immediately when the refresh is done.
+    abAppend(&ab, "\x1b[?25h", 6); // this is for showing the cursor immediately when the refresh is done.
 
-    write(STDERR_FILENO, ab.b, ab.len);
+    write(STDOUT_FILENO, ab.b, ab.len);
     abFree(&ab);
 }
 
