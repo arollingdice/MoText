@@ -1,2 +1,2 @@
-molio: molio.c
-	$(CC) molio.c -o molio -Wall -Wextra -pedantic -std=c99
+motext: motext.c
+	$(CC) motext.c -o motext -Wall -Wextra -pedantic -std=c99
