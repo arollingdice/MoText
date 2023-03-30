@@ -557,7 +557,8 @@ void editorRefreshScreen()
   
     char buf[32];
     // E.cx and E.cy refer to the cursor position in the file.
-    snprintf(buf, sizeof(buf), "\x1b[%d;%dH", E.cy - E.rowoff + 1, E.rx - E.coloff + 1);
+    snprintf(buf, sizeof(buf), "\x1b[%d;%dH", (E.cy - E.rowoff) + 1,
+                                              (E.rx - E.coloff) + 1);
     abAppend(&ab, buf, strlen(buf));
 
     abAppend(&ab, "\x1b[?25h", 6); // this is for showing the cursor immediately when the refresh is done.
@@ -705,7 +706,7 @@ void initEditor()
     // when you pass in E.screenrows and &E.screencols
     // it actually set the values for them, hence "init".
     if (getWindowSize(&E.screenrows, &E.screencols) == -1) die("getWindowSize");
-    E.screenrows -= 1;
+    E.screenrows -= 2;
 }
 
 int main(int argc, char *argv[])
@@ -724,6 +725,5 @@ int main(int argc, char *argv[])
         editorRefreshScreen();
         editorProcessKeypress();
     }
-    E.screenrows -= 2;
     return 0;
 }
